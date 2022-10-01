@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    environment:
+      - DATABASE_URL=postgres://postgres:1387@database:5432/students
+    depends_on:
+      - database
+    networks:
+      - students-network
+
+  database:
+    image: postgres:13
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1387
+      - POSTGRES_DB=postgres
+    networks:
+      - students-network
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+
+networks:
+  students-network:
+    driver: bridge
+
+volumes:
+  dbdata:
